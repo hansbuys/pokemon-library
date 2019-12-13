@@ -1,7 +1,8 @@
 import React from 'react';
 import {render, waitForElement} from '@testing-library/react';
-import App, {Pokemon} from './App';
+import App from './App';
 import {PokemonRepository} from "./pokemon/PokemonRepository";
+import {Pokemon} from "./pokemon/Pokemon";
 
 class TestPokemonRepository implements PokemonRepository {
 
@@ -12,9 +13,7 @@ class TestPokemonRepository implements PokemonRepository {
     }
 
     getAll(): Promise<Pokemon[]> {
-        const list = this._pokemon;
-        const wait = (list: Pokemon[]) => new Promise<Pokemon[]>(res => res(list));
-        return wait(list);
+        return new Promise<Pokemon[]>(res => res(this._pokemon));
     }
 }
 

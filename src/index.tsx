@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App, {Pokemon} from './App';
+import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {PokemonRepository} from "./pokemon/PokemonRepository";
+import {Pokemon} from "./pokemon/Pokemon";
 
 ReactDOM.render(<App getPokemon={new class implements PokemonRepository {
     getAll(): Promise<Pokemon[]> {

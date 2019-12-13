@@ -2,20 +2,17 @@ import React, {Component} from 'react';
 import './App.css';
 import {Header} from "./MainPageHeader";
 import {PokemonRepository} from "./pokemon/PokemonRepository";
-
-export type Pokemon = {
-    name: string,
-    sprite: string
-}
+import {Pokemon} from "./pokemon/Pokemon";
 
 interface GetPokemonProps {
     getPokemon: PokemonRepository
 }
-interface PokemonProps {
+
+interface AppProps {
     pokemon: Pokemon[]
 }
 
-class App extends Component<GetPokemonProps, PokemonProps> {
+export default class App extends Component<GetPokemonProps, AppProps> {
 
     constructor(props: GetPokemonProps) {
         super(props);
@@ -31,22 +28,19 @@ class App extends Component<GetPokemonProps, PokemonProps> {
     }
 
     render() {
-        let list;
-        if (this.state.pokemon) {
-            list = this.state.pokemon.map((value: Pokemon, index: number) =>
-                (<p>{index} - {value.name}</p>)
-            )
-        }
+        const list = this.state.pokemon.map((value: Pokemon) =>
+            <li><img src={value.sprite} alt={value.name}/> {value.name}</li>
+        );
 
         return (
             <div className="App">
                 <Header/>
+                <ul>
                 {
                     list
                 }
+                </ul>
             </div>
         );
     }
 }
-
-export default App;
