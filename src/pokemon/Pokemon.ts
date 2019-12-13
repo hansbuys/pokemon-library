@@ -1,4 +1,3 @@
 export type Pokemon = {
-    name: string,
-    sprite: string
+    name: string
 }

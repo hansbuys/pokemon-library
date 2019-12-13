@@ -6,8 +6,7 @@ export class PokeApi implements PokemonRepository {
     getAll(): Promise<Pokemon[]> {
         return new Promise<Pokemon[]>((resolve) => {
             resolve([{
-                name: "Bulbasaur",
-                sprite: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png"
+                name: "Bulbasaur"
             }]);
         });
     }

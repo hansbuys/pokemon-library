@@ -24,15 +24,16 @@ test('Contains a header', () => {
     expect(linkElement).toHaveClass("header")
 });
 
-test('Can render one pokemon', async () => {
-    const bulbasaur: Pokemon = {
-        name: "Bulbasaur",
-        sprite: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png"
-    };
+test('Can render multiple pokemon', async () => {
+    const multiple: Pokemon[] = [
+            { name: "Bulbasaur" },
+            { name: "Blastoise" },
+            { name: "Charizard" }
+        ];
 
-    const {getByText} = render(<App getPokemon={new TestPokemonRepository([bulbasaur])}/>);
+    const {getByText} = render(<App getPokemon={new TestPokemonRepository(multiple)}/>);
 
-    const textElement = await waitForElement(() => getByText(new RegExp(bulbasaur.name)));
-
-    expect(textElement).toBeInTheDocument();
+    expect(await waitForElement(() => getByText(new RegExp(multiple[0].name)))).toBeInTheDocument();
+    expect(await waitForElement(() => getByText(new RegExp(multiple[1].name)))).toBeInTheDocument();
+    expect(await waitForElement(() => getByText(new RegExp(multiple[2].name)))).toBeInTheDocument();
 });
