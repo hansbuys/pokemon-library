@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8b7c7569-5fcb-4871-aa18-130420d4a6b1" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/pokemon/Pokemon.ts" afterDir="false" />
+    <list default="true" id="8b7c7569-5fcb-4871-aa18-130420d4a6b1" name="Default Changelist" comment="Extract PokeApi PokemonRepository interface.">
+      <change afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pokemon/PokeApi.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.test.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.test.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pokemon/PokemonRepository.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/pokemon/PokemonRepository.ts" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -38,6 +36,8 @@
   </component>
   <component name="RecentsManager">
     <key name="es6.move.members.recent.items">
+      <recent name="$PROJECT_DIR$/src/pokemon/PokeApi.ts" />
+      <recent name="$PROJECT_DIR$/src/pokemon/PokeApiPokemonRepository.ts" />
       <recent name="$PROJECT_DIR$/src/pokemon/Pokemon.ts" />
     </key>
   </component>
@@ -136,7 +136,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1576249639216</updated>
-      <workItem from="1576249640760" duration="8537000" />
+      <workItem from="1576249640760" duration="9086000" />
     </task>
     <task id="LOCAL-00001" summary="We can now display pokemon!">
       <created>1576262577259</created>
@@ -145,7 +145,14 @@
       <option name="project" value="LOCAL" />
       <updated>1576262577259</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="We can now display pokemon as an unordered list. Refactored some classes.">
+      <created>1576272155374</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1576272155374</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -164,6 +171,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="We can now display pokemon!" />
-    <option name="LAST_COMMIT_MESSAGE" value="We can now display pokemon!" />
+    <MESSAGE value="We can now display pokemon as an unordered list. Refactored some classes." />
+    <MESSAGE value="Extract PokeApi PokemonRepository interface." />
+    <option name="LAST_COMMIT_MESSAGE" value="Extract PokeApi PokemonRepository interface." />
   </component>
 </project>
