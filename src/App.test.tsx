@@ -12,7 +12,7 @@ class TestPokemonRepository implements PokemonRepository {
         this._pokemon = pokemon;
     }
 
-    getAll(): Promise<Paginated<Pokemon>> {
+    getAll(offset?: number, limit?: number): Promise<Paginated<Pokemon>> {
         return new Promise<Paginated<Pokemon>>(res => res({
             totalCount: this._pokemon.length,
             offset: 0,
@@ -30,10 +30,10 @@ test('Contains a header', () => {
 
 test('Can render multiple pokemon', async () => {
     const multiple: Pokemon[] = [
-            { name: "Bulbasaur", imageUrl: "", id: 0 },
-            { name: "Blastoise", imageUrl: "", id: 1 },
-            { name: "Charizard", imageUrl: "", id: 2 }
-        ];
+        {name: "Bulbasaur", imageUrl: "", id: 0},
+        {name: "Blastoise", imageUrl: "", id: 1},
+        {name: "Charizard", imageUrl: "", id: 2}
+    ];
 
     const {getByText} = render(<App getPokemon={new TestPokemonRepository(multiple)}/>);
 
@@ -44,8 +44,8 @@ test('Can render multiple pokemon', async () => {
 
 test('Can render image of pokemon', async () => {
     const multiple: Pokemon[] = [
-            { name: "Bulbasaur", imageUrl: "http://source", id: 0}
-        ];
+        {name: "Bulbasaur", imageUrl: "http://source", id: 0}
+    ];
 
     const {getByAltText} = render(<App getPokemon={new TestPokemonRepository(multiple)}/>);
 
