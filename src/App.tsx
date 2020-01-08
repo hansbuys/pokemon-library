@@ -4,6 +4,7 @@ import {Header} from "./MainPageHeader";
 import {Paginated, PokemonRepository} from "./pokemon/PokemonRepository";
 import {Pokemon} from "./pokemon/Pokemon";
 import {PokemonListItem} from "./PokemonListItem";
+import {Pagination} from "./Pagination";
 
 export default class App extends Component<{ getPokemon: PokemonRepository }, { pokemon: Paginated<Pokemon> }> {
 
@@ -36,6 +37,7 @@ export default class App extends Component<{ getPokemon: PokemonRepository }, { 
                             <PokemonListItem pokemon={value}/>)
                     }
                 </ul>
+                <Pagination pages={this.state.pokemon}/>
             </div>
         );
     }

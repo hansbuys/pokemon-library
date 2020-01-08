@@ -7,5 +7,5 @@ export type Paginated<T> = {
 }
 
 export interface PokemonRepository {
-    getAll(offset?: number, limit?: number): Promise<Paginated<Pokemon>>
+    getAll(offset?: number): Promise<Paginated<Pokemon>>
 }

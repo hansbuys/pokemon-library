@@ -20,7 +20,7 @@ export class PokeApi implements PokemonRepository {
         "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";
     private readonly client = new restm.RestClient("", PokeApi.baseUrl);
 
-    getAll(offset?: number, limit?: number): Promise<Paginated<Pokemon>> {
+    getAll(offset?: number): Promise<Paginated<Pokemon>> {
         return this.client.get<PokemonList>("/api/v2/pokemon").then(value => {
             if (!value.result) {
                 return Promise.resolve({totalCount: 0, offset: 0, results: []});

@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8b7c7569-5fcb-4871-aa18-130420d4a6b1" name="Default Changelist" comment="Implement PokeApi with actual client call.">
+    <list default="true" id="8b7c7569-5fcb-4871-aa18-130420d4a6b1" name="Default Changelist" comment="Add image to Pokemon list. Enable pagination for pokemon lists.">
+      <change afterPath="$PROJECT_DIR$/src/Pagination.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.test.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.test.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/PokemonListItem.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/PokemonListItem.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pokemon/PokeApi.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/pokemon/PokeApi.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pokemon/Pokemon.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/pokemon/Pokemon.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pokemon/PokemonRepository.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/pokemon/PokemonRepository.ts" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -70,19 +69,6 @@
       <test-file value="$PROJECT_DIR$/src/App.test.tsx" />
       <method v="2" />
     </configuration>
-    <configuration name="Can render a detail link" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
-      <node-interpreter value="project" />
-      <node-options value="" />
-      <jest-package value="$PROJECT_DIR$/node_modules/react-scripts" />
-      <working-dir value="$PROJECT_DIR$" />
-      <envs />
-      <scope-kind value="TEST" />
-      <test-file value="$PROJECT_DIR$/src/App.test.tsx" />
-      <test-names>
-        <test-name value="Can render a detail link" />
-      </test-names>
-      <method v="2" />
-    </configuration>
     <configuration name="Can render image of pokemon" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
       <node-options value="" />
@@ -96,7 +82,7 @@
       </test-names>
       <method v="2" />
     </configuration>
-    <configuration name="Can render multiple pokemon" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+    <configuration name="Can render pokemon in a paginated way" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
       <node-options value="" />
       <jest-package value="$PROJECT_DIR$/node_modules/react-scripts" />
@@ -105,7 +91,20 @@
       <scope-kind value="TEST" />
       <test-file value="$PROJECT_DIR$/src/App.test.tsx" />
       <test-names>
-        <test-name value="Can render multiple pokemon" />
+        <test-name value="Can render pokemon in a paginated way" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration name="Can render pokemon with odd number of pages" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <node-options value="" />
+      <jest-package value="$PROJECT_DIR$/node_modules/react-scripts" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs />
+      <scope-kind value="TEST" />
+      <test-file value="$PROJECT_DIR$/src/App.test.tsx" />
+      <test-names>
+        <test-name value="Can render pokemon with odd number of pages" />
       </test-names>
       <method v="2" />
     </configuration>
@@ -125,10 +124,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Jest.App.test.tsx" />
+        <item itemvalue="Jest.Can render pokemon with odd number of pages" />
         <item itemvalue="npm.start" />
+        <item itemvalue="Jest.Can render pokemon in a paginated way" />
         <item itemvalue="Jest.Can render image of pokemon" />
-        <item itemvalue="Jest.Can render a detail link" />
-        <item itemvalue="Jest.Can render multiple pokemon" />
       </list>
     </recent_temporary>
   </component>
@@ -144,7 +143,7 @@
       <updated>1576249639216</updated>
       <workItem from="1576249640760" duration="12813000" />
       <workItem from="1576707534808" duration="514000" />
-      <workItem from="1577987348913" duration="3793000" />
+      <workItem from="1577987348913" duration="8492000" />
     </task>
     <task id="LOCAL-00001" summary="We can now display pokemon!">
       <created>1576262577259</created>
@@ -174,7 +173,21 @@
       <option name="project" value="LOCAL" />
       <updated>1576275792493</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Add image to Pokemon list. Enable pagination for pokemon lists.">
+      <created>1578440802727</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1578440802727</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Add image to Pokemon list. Enable pagination for pokemon lists.">
+      <created>1578440865931</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1578440865931</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -199,6 +212,22 @@
     <MESSAGE value="We can now display pokemon as an unordered list. Refactored some classes." />
     <MESSAGE value="Extract PokeApi PokemonRepository interface." />
     <MESSAGE value="Remove sprite property. Simplify React components. Refactor out pokemon list item function." />
-    <option name="LAST_COMMIT_MESSAGE" value="Remove sprite property. Simplify React components. Refactor out pokemon list item function." />
+    <MESSAGE value="Add image to Pokemon list. Enable pagination for pokemon lists." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add image to Pokemon list. Enable pagination for pokemon lists." />
+    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/Pagination.tsx</url>
+          <line>7</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
