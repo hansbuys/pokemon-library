@@ -1,5 +1,5 @@
 import React from 'react';
-import {render, waitForDomChange, waitForElement} from '@testing-library/react';
+import {fireEvent, render, waitForDomChange, waitForElement} from '@testing-library/react';
 import App from './App';
 import {Paginated, PokemonRepository} from "./pokemon/PokemonRepository";
 import {Pokemon} from "./pokemon/Pokemon";
@@ -37,12 +37,9 @@ describe("Main page tests", () => {
         const {getByText, queryByText} = render(<App getPokemon={new TestPokemonRepository(multiple, 1)}/>);
 
         expect(await waitForElement(() => getByText(new RegExp(multiple[0].name)))).toBeInTheDocument();
-
-        // to ensure that our repository is working correctly.
         expect(queryByText(new RegExp(multiple[1].name))).not.toBeInTheDocument();
         expect(queryByText(new RegExp(multiple[2].name))).not.toBeInTheDocument();
 
-        // 3 pages, 1 pokemon each + navigation
         expect(queryByText("1")).toBeInTheDocument();
         expect(queryByText("2")).toBeInTheDocument();
         expect(queryByText("3")).toBeInTheDocument();
@@ -57,10 +54,8 @@ describe("Main page tests", () => {
 
         await waitForDomChange();
 
-        // to ensure that our repository is working correctly.
         expect(queryByText(new RegExp(multiple[1].name))).not.toBeInTheDocument();
 
-        // 3 pages, 1 pokemon each + navigation
         expect(queryByText("1")).toBeInTheDocument();
         expect(queryByText("2")).toBeInTheDocument();
         expect(queryByText("3")).not.toBeInTheDocument();
@@ -75,7 +70,6 @@ describe("Main page tests", () => {
 
         await waitForDomChange();
 
-        // 3 pages, 1 pokemon each + navigation
         expect(queryByText("1")).not.toBeInTheDocument();
         expect(queryByText("2")).not.toBeInTheDocument();
         expect(queryByText("3")).not.toBeInTheDocument();
@@ -109,6 +103,21 @@ describe("Main page tests", () => {
         expect(queryByText("<")).toBeInTheDocument();
         expect(queryByText(">")).toBeInTheDocument();
     });
+
+    test('When a page is clicked, it shows that page', async () => {
+        const multiple: Pokemon[] = generatePokemon(2);
+
+        const {queryByText, getByText} = render(<App getPokemon={new TestPokemonRepository(multiple, 1)}/>);
+
+        expect(await waitForElement(() => queryByText(new RegExp(multiple[0].name)))).toBeInTheDocument();
+
+        let page = getByText("2");
+        expect(page).toBeInTheDocument();
+        fireEvent.click(page);
+
+        expect(await waitForElement(() => queryByText(new RegExp(multiple[1].name)))).toBeInTheDocument();
+        expect(queryByText(new RegExp(multiple[0].name))).not.toBeInTheDocument();
+    });
 });
 
 class TestPokemonRepository implements PokemonRepository {
@@ -122,7 +131,9 @@ class TestPokemonRepository implements PokemonRepository {
     }
 
     getAll(offset?: number): Promise<Paginated<Pokemon>> {
-        let pageResult = this._pokemon.slice(offset, (offset || 0) + this._limit);
+        let start = offset;
+        let end = (offset || 0) + this._limit;
+        let pageResult = this._pokemon.slice(start, end);
         let currentOffset = offset || 0;
         return new Promise<Paginated<Pokemon>>(res => res({
             totalCount: this._pokemon.length,

@@ -21,7 +21,10 @@ export class PokeApi implements PokemonRepository {
     private readonly client = new restm.RestClient("", PokeApi.baseUrl);
 
     getAll(offset?: number): Promise<Paginated<Pokemon>> {
-        return this.client.get<PokemonList>("/api/v2/pokemon").then(value => {
+        let queryParams = `${offset ? "?offset=" + offset * 20 : ""}`;
+        console.log(`Requesting /api/v2/pokemon${queryParams}`);
+
+        return this.client.get<PokemonList>(`/api/v2/pokemon${queryParams}`).then(value => {
             if (!value.result) {
                 return Promise.resolve({totalCount: 0, offset: 0, results: []});
             }

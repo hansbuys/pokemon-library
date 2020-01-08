@@ -20,11 +20,7 @@ export default class App extends Component<{ getPokemon: PokemonRepository }, { 
     }
 
     componentDidMount(): void {
-        this.props.getPokemon.getAll().then(result => {
-            this.setState({
-                pokemon: result
-            })
-        });
+        this.fetchPage();
     }
 
     render() {
@@ -37,8 +33,19 @@ export default class App extends Component<{ getPokemon: PokemonRepository }, { 
                             <PokemonListItem key={value.name} pokemon={value}/>)
                     }
                 </ul>
-                <Pagination pages={this.state.pokemon}/>
+                <Pagination pages={this.state.pokemon} onPageChange={(newPage) => {
+                    this.fetchPage(newPage)
+                }}/>
             </div>
         );
+    }
+
+    private fetchPage(page?: number) {
+        console.log(`Fetching page ${page || 1}`);
+        this.props.getPokemon.getAll(page ? page - 1 : undefined).then(result => {
+            this.setState({
+                pokemon: result
+            })
+        });
     }
 }

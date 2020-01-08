@@ -1,7 +1,7 @@
 import React from "react";
 import {Paginated} from "./pokemon/PokemonRepository";
 
-export function Pagination(props: { pages: Paginated<any> }) {
+export function Pagination(props: { pages: Paginated<any>, onPageChange: (newPage: number) => void }) {
     const pageSize = props.pages.results.length;
 
     if (props.pages.totalCount > pageSize) {
@@ -15,7 +15,7 @@ export function Pagination(props: { pages: Paginated<any> }) {
                     <li key="previous">&lt;</li>
                     {
                         pages.map((i) =>
-                            <li key={i}>{i}</li>
+                            <li key={i} onClick={() => props.onPageChange(i)}>{i}</li>
                         )
                     }
                     <li key="next">&gt;</li>
