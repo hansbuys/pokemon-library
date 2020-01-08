@@ -11,13 +11,13 @@ export function Pagination(props: { pages: Paginated<any> }) {
         return (
             <div>
                 <ul>
-                    <li>&lt;</li>
+                    <li key="previous">&lt;</li>
                     {
                         pages.map((i) =>
-                            <li>{i}</li>
+                            <li key={i}>{i}</li>
                         )
                     }
-                    <li>&gt;</li>
+                    <li key="next">&gt;</li>
                 </ul>
             </div>
         );

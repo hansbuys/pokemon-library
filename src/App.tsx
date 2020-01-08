@@ -34,7 +34,7 @@ export default class App extends Component<{ getPokemon: PokemonRepository }, { 
                 <ul>
                     {
                         this.state.pokemon.results.map((value: Pokemon) =>
-                            <PokemonListItem pokemon={value}/>)
+                            <PokemonListItem key={value.name} pokemon={value}/>)
                     }
                 </ul>
                 <Pagination pages={this.state.pokemon}/>
