@@ -6,11 +6,12 @@ export function Pagination(props: { pages: Paginated<any> }) {
 
     if (props.pages.totalCount > pageSize) {
         const pageCount = Math.ceil(props.pages.totalCount / pageSize);
-        const pages = Array.from(Array(pageCount).keys(), v => v + 1);
-        console.log(`Number of pages: ${pageCount}`);
+        const pages = Array.from(Array(Math.min(pageCount, 10)).keys(), v => v + 1);
+        console.log(`Total number of pages: ${pageCount}`);
+
         return (
             <div>
-                <ul>
+                <ul className="pagination">
                     <li key="previous">&lt;</li>
                     {
                         pages.map((i) =>

@@ -94,6 +94,21 @@ describe("Main page tests", () => {
         expect(queryByText("2")).toBeInTheDocument();
         expect(queryByText("3")).not.toBeInTheDocument();
     });
+
+    test('Displays a maximum of 10 pages', async () => {
+        const multiple: Pokemon[] = generatePokemon(11);
+
+        const {queryByText} = render(<App getPokemon={new TestPokemonRepository(multiple, 1)}/>);
+
+        await waitForDomChange();
+
+        for (let i = 1; i <= 10; i++) {
+            expect(queryByText(`${i}`)).toBeInTheDocument();
+        }
+        expect(queryByText("11")).not.toBeInTheDocument();
+        expect(queryByText("<")).toBeInTheDocument();
+        expect(queryByText(">")).toBeInTheDocument();
+    });
 });
 
 class TestPokemonRepository implements PokemonRepository {
