@@ -6,7 +6,7 @@ import {Pokemon} from "./pokemon/Pokemon";
 
 describe("Main page tests", () => {
     test('Contains a header', () => {
-        const {getByText} = render(<App getPokemon={new TestPokemonRepository([])}/>);
+        const {getByText} = display();
         const linkElement = getByText(/Pokemon Library/);
         expect(linkElement).toBeInTheDocument();
         expect(linkElement).toHaveClass("header")
@@ -15,7 +15,7 @@ describe("Main page tests", () => {
     test('Displays all pokemon on a single page', async () => {
         const multiple: Pokemon[] = generatePokemon(3);
 
-        const {getByText} = render(<App getPokemon={new TestPokemonRepository(multiple)}/>);
+        const {getByText} = display(multiple);
 
         expect(await waitForElement(() => getByText(new RegExp(multiple[0].name)))).toBeInTheDocument();
         expect(await waitForElement(() => getByText(new RegExp(multiple[1].name)))).toBeInTheDocument();
@@ -25,7 +25,7 @@ describe("Main page tests", () => {
     test('Displays an image of the pokemon', async () => {
         const multiple: Pokemon[] = generatePokemon(1);
 
-        const {getByAltText} = render(<App getPokemon={new TestPokemonRepository(multiple)}/>);
+        const {getByAltText} = display(multiple);
 
         const image = await waitForElement(() => getByAltText(new RegExp(multiple[0].name)));
         expect(image).toHaveAttribute("src", multiple[0].imageUrl);
@@ -34,7 +34,7 @@ describe("Main page tests", () => {
     test('Displays pokemon in a paginated way', async () => {
         const multiple: Pokemon[] = generatePokemon(3);
 
-        const {getByText, queryByText} = render(<App getPokemon={new TestPokemonRepository(multiple, 1)}/>);
+        const {getByText, queryByText} = display(multiple, 1);
 
         expect(await waitForElement(() => getByText(new RegExp(multiple[0].name)))).toBeInTheDocument();
         expect(queryByText(new RegExp(multiple[1].name))).not.toBeInTheDocument();
@@ -50,7 +50,7 @@ describe("Main page tests", () => {
     test('Displays correct number of pages', async () => {
         const multiple: Pokemon[] = generatePokemon(2);
 
-        const {queryByText} = render(<App getPokemon={new TestPokemonRepository(multiple, 1)}/>);
+        const {queryByText} = display(multiple, 1);
 
         await waitForDomChange();
 
@@ -66,7 +66,7 @@ describe("Main page tests", () => {
     test('When all pokemon fit on a single page, there are no pagination controls', async () => {
         const multiple: Pokemon[] = generatePokemon(3);
 
-        const {queryByText} = render(<App getPokemon={new TestPokemonRepository(multiple)}/>);
+        const {queryByText} = display(multiple);
 
         await waitForDomChange();
 
@@ -80,7 +80,7 @@ describe("Main page tests", () => {
     test('Displays odd number of pages', async () => {
         const multiple: Pokemon[] = generatePokemon(3);
 
-        const {queryByText} = render(<App getPokemon={new TestPokemonRepository(multiple, 2)}/>);
+        const {queryByText} = display(multiple, 2);
 
         await waitForDomChange();
 
@@ -92,7 +92,7 @@ describe("Main page tests", () => {
     test('Displays a maximum of 10 pages', async () => {
         const multiple: Pokemon[] = generatePokemon(11);
 
-        const {queryByText} = render(<App getPokemon={new TestPokemonRepository(multiple, 1)}/>);
+        const {queryByText} = display(multiple, 1);
 
         await waitForDomChange();
 
@@ -107,30 +107,56 @@ describe("Main page tests", () => {
     test('When a page is clicked, it shows that page', async () => {
         const multiple: Pokemon[] = generatePokemon(2);
 
-        const {queryByText, getByText} = render(<App getPokemon={new TestPokemonRepository(multiple, 1)}/>);
+        const {queryByText, getByText} = display(multiple, 1);
 
         expect(await waitForElement(() => queryByText(new RegExp(multiple[0].name)))).toBeInTheDocument();
 
-        let page = getByText("2");
-        expect(page).toBeInTheDocument();
-        fireEvent.click(page);
+        fireEvent.click(getByText("2"));
 
         expect(await waitForElement(() => queryByText(new RegExp(multiple[1].name)))).toBeInTheDocument();
         expect(queryByText(new RegExp(multiple[0].name))).not.toBeInTheDocument();
     });
+
+    test("When the currently active page is clicked, it doesn't get fetch page", async () => {
+        const multiple: Pokemon[] = generatePokemon(2);
+
+        let repository = new TestPokemonRepository(multiple, 1);
+        const {queryByText, getByText} = displayWithRepository(repository);
+
+        expect(await waitForElement(() => queryByText(new RegExp(multiple[0].name)))).toBeInTheDocument();
+        expect(repository.numberOfTimesGetAllIsCalled).toBe(1);
+
+        fireEvent.click(getByText("1"));
+
+        expect(repository.numberOfTimesGetAllIsCalled).toBe(1);
+    });
+
+    function display(pokemon?: Pokemon[], renderLimit?: number) {
+        return displayWithRepository(new TestPokemonRepository(pokemon || [], renderLimit));
+    }
+
+    function displayWithRepository(repository: PokemonRepository) {
+        return render(<App getPokemon={repository}/>);
+    }
 });
 
 class TestPokemonRepository implements PokemonRepository {
-
     private readonly _pokemon: Pokemon[];
+
     private readonly _limit: number;
+    private _numberOfTimesGetAllIsCalled = 0;
 
     public constructor(pokemon: Pokemon[], limit?: number) {
         this._pokemon = pokemon;
         this._limit = limit || pokemon.length;
     }
 
+    get numberOfTimesGetAllIsCalled(): number {
+        return this._numberOfTimesGetAllIsCalled;
+    }
+
     getAll(offset?: number): Promise<Paginated<Pokemon>> {
+        this._numberOfTimesGetAllIsCalled++;
         let start = offset;
         let end = (offset || 0) + this._limit;
         let pageResult = this._pokemon.slice(start, end);
