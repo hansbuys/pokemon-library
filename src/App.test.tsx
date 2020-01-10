@@ -1,5 +1,13 @@
 import React from 'react';
-import {fireEvent, render, waitForDomChange, waitForElement} from '@testing-library/react';
+import {
+    fireEvent,
+    Matcher,
+    render,
+    RenderResult,
+    SelectorMatcherOptions,
+    waitForDomChange,
+    waitForElement
+} from '@testing-library/react';
 import App from './App';
 import {Paginated, PokemonRepository} from "./pokemon/PokemonRepository";
 import {Pokemon} from "./pokemon/Pokemon";
@@ -40,11 +48,7 @@ describe("Main page tests", () => {
         expect(queryByText(new RegExp(multiple[1].name))).not.toBeInTheDocument();
         expect(queryByText(new RegExp(multiple[2].name))).not.toBeInTheDocument();
 
-        expect(queryByText("1")).toBeInTheDocument();
-        expect(queryByText("2")).toBeInTheDocument();
-        expect(queryByText("3")).toBeInTheDocument();
-        expect(queryByText("<")).toBeInTheDocument();
-        expect(queryByText(">")).toBeInTheDocument();
+        expectNumberOfPagesWithNavigation(3, queryByText);
     });
 
     test('Displays correct number of pages', async () => {
@@ -56,11 +60,7 @@ describe("Main page tests", () => {
 
         expect(queryByText(new RegExp(multiple[1].name))).not.toBeInTheDocument();
 
-        expect(queryByText("1")).toBeInTheDocument();
-        expect(queryByText("2")).toBeInTheDocument();
-        expect(queryByText("3")).not.toBeInTheDocument();
-        expect(queryByText("<")).toBeInTheDocument();
-        expect(queryByText(">")).toBeInTheDocument();
+        expectNumberOfPagesWithNavigation(2, queryByText);
     });
 
     test('When all pokemon fit on a single page, there are no pagination controls', async () => {
@@ -70,11 +70,7 @@ describe("Main page tests", () => {
 
         await waitForDomChange();
 
-        expect(queryByText("1")).not.toBeInTheDocument();
-        expect(queryByText("2")).not.toBeInTheDocument();
-        expect(queryByText("3")).not.toBeInTheDocument();
-        expect(queryByText("<")).not.toBeInTheDocument();
-        expect(queryByText(">")).not.toBeInTheDocument();
+        expectNoPagesAndNoNavigation(3, queryByText);
     });
 
     test('Displays odd number of pages', async () => {
@@ -84,9 +80,7 @@ describe("Main page tests", () => {
 
         await waitForDomChange();
 
-        expect(queryByText("1")).toBeInTheDocument();
-        expect(queryByText("2")).toBeInTheDocument();
-        expect(queryByText("3")).not.toBeInTheDocument();
+        expectNumberOfPagesWithNavigation(2, queryByText);
     });
 
     test('Displays a maximum of 10 pages', async () => {
@@ -96,12 +90,7 @@ describe("Main page tests", () => {
 
         await waitForDomChange();
 
-        for (let i = 1; i <= 10; i++) {
-            expect(queryByText(`${i}`)).toBeInTheDocument();
-        }
-        expect(queryByText("11")).not.toBeInTheDocument();
-        expect(queryByText("<")).toBeInTheDocument();
-        expect(queryByText(">")).toBeInTheDocument();
+        expectNumberOfPagesWithNavigation(10, queryByText);
     });
 
     test('When a page is clicked, it shows that page', async () => {
@@ -131,12 +120,30 @@ describe("Main page tests", () => {
         expect(repository.numberOfTimesGetAllIsCalled).toBe(1);
     });
 
-    function display(pokemon?: Pokemon[], renderLimit?: number) {
+    function display(pokemon?: Pokemon[], renderLimit?: number): RenderResult {
         return displayWithRepository(new TestPokemonRepository(pokemon || [], renderLimit));
     }
 
-    function displayWithRepository(repository: PokemonRepository) {
+    function displayWithRepository(repository: PokemonRepository): RenderResult {
         return render(<App getPokemon={repository}/>);
+    }
+
+    function expectNumberOfPagesWithNavigation(exactNumPages: number, queryByText: (text: Matcher, options?: SelectorMatcherOptions) => (HTMLElement | null)) {
+        for (let i = 1; i <= exactNumPages; i++) {
+            expect(queryByText(`${i}`)).toBeInTheDocument();
+        }
+        expect(queryByText("<")).toBeInTheDocument();
+        expect(queryByText(">")).toBeInTheDocument();
+
+        expect(queryByText(`${exactNumPages + 1}`)).not.toBeInTheDocument();
+    }
+
+    function expectNoPagesAndNoNavigation(exactNumPages: number, queryByText: (text: Matcher, options?: SelectorMatcherOptions) => (HTMLElement | null)) {
+        for (let i = 1; i <= exactNumPages; i++) {
+            expect(queryByText(`${i}`)).not.toBeInTheDocument();
+        }
+        expect(queryByText("<")).not.toBeInTheDocument();
+        expect(queryByText(">")).not.toBeInTheDocument();
     }
 });
 
