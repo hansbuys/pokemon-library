@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import {PokeApi} from "./pokemon/PokeApi";
+import {PokeApi} from "./PokemonRepository/PokeApi";
 
 ReactDOM.render(<App getPokemon={new PokeApi()}/>, document.getElementById('root'));
 

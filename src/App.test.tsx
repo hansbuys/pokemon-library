@@ -9,8 +9,8 @@ import {
     waitForElement
 } from '@testing-library/react';
 import App from './App';
-import {Paginated, PokemonRepository} from "./pokemon/PokemonRepository";
-import {Pokemon} from "./pokemon/Pokemon";
+import {Paginated, PokemonRepository} from "./PokemonRepository/PokemonRepository";
+import {Pokemon} from "./PokemonRepository/Pokemon";
 import {Logging} from "./Logging";
 import {LogLevel} from "typescript-logging";
 
@@ -28,7 +28,7 @@ describe(testClass, () => {
         expect(linkElement).toHaveClass("header")
     });
 
-    test('Displays all pokemon on a single page', async () => {
+    test('Displays all PokemonRepository on a single page', async () => {
         const multiple: Pokemon[] = generatePokemon(3);
 
         const {getByText} = display(multiple);
@@ -38,7 +38,7 @@ describe(testClass, () => {
         expect(await waitForElement(() => getByText(new RegExp(multiple[2].name)))).toBeInTheDocument();
     });
 
-    test('Displays an image of the pokemon', async () => {
+    test('Displays an image of the PokemonRepository', async () => {
         const multiple: Pokemon[] = generatePokemon(1);
 
         const {getByAltText} = display(multiple);
@@ -47,7 +47,7 @@ describe(testClass, () => {
         expect(image).toHaveAttribute("src", multiple[0].imageUrl);
     });
 
-    test('Displays pokemon in a paginated way', async () => {
+    test('Displays PokemonRepository in a paginated way', async () => {
         const multiple: Pokemon[] = generatePokemon(3);
 
         const {getByText, queryByText} = display(multiple, 1);
@@ -69,7 +69,7 @@ describe(testClass, () => {
         expectNumberOfPagesWithNavigation(2, queryByText);
     });
 
-    test('When all pokemon fit on a single page, there are no pagination controls', async () => {
+    test('When all PokemonRepository fit on a single page, there are no pagination controls', async () => {
         const multiple: Pokemon[] = generatePokemon(3);
 
         const {queryByText} = display(multiple);

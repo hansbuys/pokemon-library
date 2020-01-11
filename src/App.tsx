@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
 import './App.css';
-import {Header} from "./MainPageHeader";
-import {Paginated, PokemonRepository} from "./pokemon/PokemonRepository";
-import {Pokemon} from "./pokemon/Pokemon";
-import {PokemonListItem} from "./PokemonListItem";
-import {Pagination} from "./Pagination";
+import {Paginated, PokemonRepository} from "./PokemonRepository/PokemonRepository";
+import {Pokemon} from "./PokemonRepository/Pokemon";
+import PokemonList from "./PokemonList/PokemonList";
 
 export default class App extends Component<{ getPokemon: PokemonRepository }, { pokemon: Paginated<Pokemon> }> {
 
@@ -27,16 +25,7 @@ export default class App extends Component<{ getPokemon: PokemonRepository }, { 
     render() {
         return (
             <div className="App">
-                <Header/>
-                <ul>
-                    {
-                        this.state.pokemon.results.map((value: Pokemon) =>
-                            <PokemonListItem key={value.name} pokemon={value}/>)
-                    }
-                </ul>
-                <Pagination pages={this.state.pokemon} onPageChange={(newPage) => {
-                    this.fetchPage(newPage)
-                }}/>
+                <PokemonList pokemon={this.state.pokemon} fetchPage={this.fetchPage.bind(this)}/>
             </div>
         );
     }

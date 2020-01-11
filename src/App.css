@@ -2,32 +2,3 @@
     margin-left: 200px;
     margin-right: 200px;
 }
-
-h1 {
-    text-align: center;
-}
-
-ul {
-    list-style-type: none;
-}
-
-ul[class=pagination] li {
-    display: inline;
-    margin: .2em;
-    color: blue;
-    cursor: pointer;
-    text-decoration: underline;
-}
-
-ul[class=pagination] li[class=active] {
-    font-weight: bold;
-    text-decoration: unset;
-    color: unset;
-    cursor: unset;
-}
-
-ul[class=pagination] li[class=disable] {
-    text-decoration: unset;
-    color: unset;
-    cursor: unset;
-}

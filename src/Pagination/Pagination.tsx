@@ -1,6 +1,7 @@
 import React from "react";
-import {Paginated} from "./pokemon/PokemonRepository";
-import {Logging} from "./Logging";
+import {Paginated} from "../PokemonRepository/PokemonRepository";
+import {Logging} from "../Logging";
+import './Pagination.css';
 
 export function Pagination(props: { pages: Paginated<any>, onPageChange: (newPage: number) => void }) {
     const logger = Logging.createLogger(Pagination);
