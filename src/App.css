@@ -14,4 +14,20 @@ ul {
 ul[class=pagination] li {
     display: inline;
     margin: .2em;
+    color: blue;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+ul[class=pagination] li[class=active] {
+    font-weight: bold;
+    text-decoration: unset;
+    color: unset;
+    cursor: unset;
+}
+
+ul[class=pagination] li[class=disable] {
+    text-decoration: unset;
+    color: unset;
+    cursor: unset;
 }

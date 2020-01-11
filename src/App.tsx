@@ -12,6 +12,7 @@ export default class App extends Component<{ getPokemon: PokemonRepository }, { 
         super(props);
         this.state = {
             pokemon: {
+                pageSize: 0,
                 totalCount: 0,
                 offset: 0,
                 results: []

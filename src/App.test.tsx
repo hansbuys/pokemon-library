@@ -155,6 +155,7 @@ describe(testClass, () => {
         expect(await waitForElement(() => queryByText(new RegExp(multiple[0].name)))).toBeInTheDocument();
 
         fireEvent.click(getByText("<"));
+        expect(getByText("<")).toHaveClass("disable");
 
         expect(await waitForElement(() => queryByText(new RegExp(multiple[0].name)))).toBeInTheDocument();
         expect(repository.numberOfTimesGetAllIsCalled).toBe(1);
@@ -170,8 +171,18 @@ describe(testClass, () => {
         fireEvent.click(getByText(">"));
         expect(await waitForElement(() => queryByText(new RegExp(multiple[1].name)))).toBeInTheDocument();
         fireEvent.click(getByText(">"));
+        expect(getByText(">")).toHaveClass("disable");
 
         expect(repository.numberOfTimesGetAllIsCalled).toBe(2);
+    });
+
+    test("The current page is active", async () => {
+        const multiple: Pokemon[] = generatePokemon(2);
+        const {queryByText} = display(multiple, 1);
+
+        let activePage = await waitForElement(() => queryByText("1"));
+        expect(activePage).toBeInTheDocument();
+        expect(activePage).toHaveClass("active");
     });
 
     function display(pokemon?: Pokemon[], renderLimit?: number): RenderResult {
@@ -224,6 +235,7 @@ describe(testClass, () => {
             let result = {
                 totalCount: this.pokemon.length,
                 offset: currentOffset,
+                pageSize: this.limit,
                 results: pageResult
             };
             logger.info(`getAll(${offset}}) => ${JSON.stringify(result)}.`);

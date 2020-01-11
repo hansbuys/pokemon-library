@@ -34,11 +34,12 @@ export class PokeApi implements PokemonRepository {
         this.logger.info(`Requesting ${pokemonListUrl}`);
         return this.client.get<PokemonList>(pokemonListUrl).then(value => {
             if (!value.result) {
-                return Promise.resolve({totalCount: 0, offset: 0, results: []});
+                return Promise.resolve({totalCount: 0, offset: 0, pageSize: PokeApi.limit, results: []});
             }
             return {
                 totalCount: value.result.count,
                 offset: offset || 0,
+                pageSize: PokeApi.limit,
                 results: value.result.results.map((p) => PokeApi.toPokemon(p))
             };
         });
