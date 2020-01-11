@@ -41,7 +41,6 @@ export default class App extends Component<{ getPokemon: PokemonRepository }, { 
     }
 
     private fetchPage(page?: number) {
-        console.log(`Fetching page ${page || 1}`);
         this.props.getPokemon.getAll(page ? page - 1 : undefined).then(result => {
             this.setState({
                 pokemon: result

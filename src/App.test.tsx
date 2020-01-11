@@ -120,6 +120,54 @@ describe("Main page tests", () => {
         expect(repository.numberOfTimesGetAllIsCalled).toBe(1);
     });
 
+    test("Can use navigation buttons", async () => {
+        const multiple: Pokemon[] = generatePokemon(2);
+
+        let repository = new TestPokemonRepository(multiple, 1);
+        const {queryByText, getByText} = displayWithRepository(repository);
+
+        expect(await waitForElement(() => queryByText(new RegExp(multiple[0].name)))).toBeInTheDocument();
+        expect(queryByText(new RegExp(multiple[1].name))).not.toBeInTheDocument();
+
+        fireEvent.click(getByText(">"));
+
+        expect(await waitForElement(() => queryByText(new RegExp(multiple[1].name)))).toBeInTheDocument();
+        expect(queryByText(new RegExp(multiple[0].name))).not.toBeInTheDocument();
+
+        fireEvent.click(getByText("<"));
+
+        expect(await waitForElement(() => queryByText(new RegExp(multiple[0].name)))).toBeInTheDocument();
+        expect(queryByText(new RegExp(multiple[1].name))).not.toBeInTheDocument();
+    });
+
+    test("Previous navigation button does nothing on the first page", async () => {
+        const multiple: Pokemon[] = generatePokemon(2);
+
+        let repository = new TestPokemonRepository(multiple, 1);
+        const {queryByText, getByText} = displayWithRepository(repository);
+
+        expect(await waitForElement(() => queryByText(new RegExp(multiple[0].name)))).toBeInTheDocument();
+
+        fireEvent.click(getByText("<"));
+
+        expect(await waitForElement(() => queryByText(new RegExp(multiple[0].name)))).toBeInTheDocument();
+        expect(repository.numberOfTimesGetAllIsCalled).toBe(1);
+    });
+
+    test("Next navigation button does nothing on the last page", async () => {
+        const multiple: Pokemon[] = generatePokemon(2);
+
+        let repository = new TestPokemonRepository(multiple, 1);
+        const {queryByText, getByText} = displayWithRepository(repository);
+
+        expect(await waitForElement(() => queryByText(new RegExp(multiple[0].name)))).toBeInTheDocument();
+        fireEvent.click(getByText(">"));
+        expect(await waitForElement(() => queryByText(new RegExp(multiple[1].name)))).toBeInTheDocument();
+        fireEvent.click(getByText(">"));
+
+        expect(repository.numberOfTimesGetAllIsCalled).toBe(2);
+    });
+
     function display(pokemon?: Pokemon[], renderLimit?: number): RenderResult {
         return displayWithRepository(new TestPokemonRepository(pokemon || [], renderLimit));
     }

@@ -30,7 +30,7 @@ export class PokeApi implements PokemonRepository {
             }
             return {
                 totalCount: value.result.count,
-                offset: 0,
+                offset: offset || 0,
                 results: value.result.results.map((p) => PokeApi.toPokemon(p))
             };
         });
