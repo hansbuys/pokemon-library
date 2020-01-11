@@ -1,6 +1,7 @@
 import {Paginated, PokemonRepository} from "./PokemonRepository";
 import {Pokemon} from "./Pokemon";
 import * as restm from "typed-rest-client/RestClient";
+import {Logging} from "../Logging";
 
 type PokemonList = {
     count: number
@@ -20,9 +21,11 @@ export class PokeApi implements PokemonRepository {
         "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";
     private readonly client = new restm.RestClient("", PokeApi.baseUrl);
 
+    private readonly logger = Logging.createLogger("PokeApi");
+
     getAll(offset?: number): Promise<Paginated<Pokemon>> {
         let queryParams = `${offset ? "?offset=" + offset * 20 : ""}`;
-        console.log(`Requesting /api/v2/pokemon${queryParams}`);
+        this.logger.info(`Requesting /api/v2/pokemon${queryParams}`);
 
         return this.client.get<PokemonList>(`/api/v2/pokemon${queryParams}`).then(value => {
             if (!value.result) {

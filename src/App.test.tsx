@@ -11,8 +11,15 @@ import {
 import App from './App';
 import {Paginated, PokemonRepository} from "./pokemon/PokemonRepository";
 import {Pokemon} from "./pokemon/Pokemon";
+import {Logging} from "./Logging";
+import {LogLevel} from "typescript-logging";
 
-describe("Main page tests", () => {
+let testClass = "Main page tests";
+
+describe(testClass, () => {
+    Logging.logLevel = LogLevel.Trace;
+    let logger = Logging.createLogger(testClass);
+
     test('Contains a header', () => {
         const {getByText} = display();
         const linkElement = getByText(/Pokemon Library/);
@@ -53,13 +60,11 @@ describe("Main page tests", () => {
 
     test('Displays correct number of pages', async () => {
         const multiple: Pokemon[] = generatePokemon(2);
-
         const {queryByText} = display(multiple, 1);
 
         await waitForDomChange();
 
         expect(queryByText(new RegExp(multiple[1].name))).not.toBeInTheDocument();
-
         expectNumberOfPagesWithNavigation(2, queryByText);
     });
 
@@ -193,39 +198,43 @@ describe("Main page tests", () => {
         expect(queryByText("<")).not.toBeInTheDocument();
         expect(queryByText(">")).not.toBeInTheDocument();
     }
+
+    class TestPokemonRepository implements PokemonRepository {
+        private readonly _pokemon: Pokemon[];
+        private readonly _limit: number;
+
+        public constructor(pokemon: Pokemon[], limit?: number) {
+            this._pokemon = pokemon;
+            this._limit = limit || pokemon.length;
+        }
+
+        private _numberOfTimesGetAllIsCalled = 0;
+
+        get numberOfTimesGetAllIsCalled(): number {
+            return this._numberOfTimesGetAllIsCalled;
+        }
+
+        getAll(offset?: number): Promise<Paginated<Pokemon>> {
+            this._numberOfTimesGetAllIsCalled++;
+            let start = offset;
+            let end = (offset || 0) + this._limit;
+            let pageResult = this._pokemon.slice(start, end);
+            let currentOffset = offset || 0;
+            let result = {
+                totalCount: this._pokemon.length,
+                offset: currentOffset,
+                results: pageResult
+            };
+            logger.info(`getAll(${offset}}) => ${JSON.stringify(result)}.`);
+            return new Promise<Paginated<Pokemon>>(res => res(result));
+        }
+    }
+
+    function generatePokemon(number: number) {
+        logger.info(`Generating ${number} pokemon.`);
+
+        return Array.from(Array(number).keys(), (i) => {
+            return {name: `Pokemon ${i + 1}`, imageUrl: `http://url/pokemon/${i}.png`, id: i}
+        });
+    }
 });
-
-class TestPokemonRepository implements PokemonRepository {
-    private readonly _pokemon: Pokemon[];
-
-    private readonly _limit: number;
-    private _numberOfTimesGetAllIsCalled = 0;
-
-    public constructor(pokemon: Pokemon[], limit?: number) {
-        this._pokemon = pokemon;
-        this._limit = limit || pokemon.length;
-    }
-
-    get numberOfTimesGetAllIsCalled(): number {
-        return this._numberOfTimesGetAllIsCalled;
-    }
-
-    getAll(offset?: number): Promise<Paginated<Pokemon>> {
-        this._numberOfTimesGetAllIsCalled++;
-        let start = offset;
-        let end = (offset || 0) + this._limit;
-        let pageResult = this._pokemon.slice(start, end);
-        let currentOffset = offset || 0;
-        return new Promise<Paginated<Pokemon>>(res => res({
-            totalCount: this._pokemon.length,
-            offset: currentOffset,
-            results: pageResult
-        }));
-    }
-}
-
-function generatePokemon(number: number) {
-    return Array.from(Array(number).keys(), (i) => {
-        return {name: `Pokemon ${i + 1}`, imageUrl: `http://url/pokemon/${i}.png`, id: i}
-    });
-}

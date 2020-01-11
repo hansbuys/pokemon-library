@@ -1,7 +1,9 @@
 import React from "react";
 import {Paginated} from "./pokemon/PokemonRepository";
+import {Logging} from "./Logging";
 
 export function Pagination(props: { pages: Paginated<any>, onPageChange: (newPage: number) => void }) {
+    const logger = Logging.createLogger("Pagination");
     const pageSize = props.pages.results.length;
     const numberOfPages = +props.pages.totalCount / pageSize;
 
@@ -16,7 +18,7 @@ export function Pagination(props: { pages: Paginated<any>, onPageChange: (newPag
         const pages = Array.from(Array(Math.min(pageCount, 10)).keys(), v => v + 1);
 
         const currentPage = props.pages.offset + 1;
-        console.log(`Displaying page ${currentPage}/${pageCount}`);
+        logger.info(`Displaying page ${currentPage}/${pageCount}`);
 
         return <div>
             <ul className="pagination">
