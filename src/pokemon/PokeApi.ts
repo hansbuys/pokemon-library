@@ -24,11 +24,27 @@ export class PokeApi implements PokemonRepository {
     private readonly client = new restm.RestClient("", PokeApi.baseUrl);
     private readonly logger = Logging.createLogger("PokeApi");
 
-    getAll(offset?: number): Promise<Paginated<Pokemon>> {
-        let queryParams = `${(offset ? `?offset=${offset * PokeApi.limit}&limit=${PokeApi.limit}` : "")}`;
-        this.logger.info(`Requesting /api/v2/pokemon${queryParams}`);
+    private static getQueryParams(params: ((string[] | (string | number | undefined)[])[])): string {
+        return params.filter(([, value]) => {
+            return value !== undefined;
+        }).map(([key, value], i) => {
+            if (i === 0) {
+                return `?${key}=${value}`;
+            } else {
+                return `&${key}=${value}`;
+            }
+        }).join("");
+    }
 
-        return this.client.get<PokemonList>(`/api/v2/pokemon${queryParams}`).then(value => {
+    getAll(offset?: number): Promise<Paginated<Pokemon>> {
+        let queryParams = PokeApi.getQueryParams(Array.from([
+            ["offset", offset ? offset * PokeApi.limit : undefined],
+            ["limit", PokeApi.limit]
+        ]));
+
+        let pokemonListUrl = `/api/v2/pokemon${queryParams}`;
+        this.logger.info(`Requesting ${pokemonListUrl}`);
+        return this.client.get<PokemonList>(pokemonListUrl).then(value => {
             if (!value.result) {
                 return Promise.resolve({totalCount: 0, offset: 0, results: []});
             }
