@@ -200,12 +200,12 @@ describe(testClass, () => {
     }
 
     class TestPokemonRepository implements PokemonRepository {
-        private readonly _pokemon: Pokemon[];
-        private readonly _limit: number;
+        private readonly pokemon: Pokemon[];
+        private readonly limit: number;
 
         public constructor(pokemon: Pokemon[], limit?: number) {
-            this._pokemon = pokemon;
-            this._limit = limit || pokemon.length;
+            this.pokemon = pokemon;
+            this.limit = limit || pokemon.length;
         }
 
         private _numberOfTimesGetAllIsCalled = 0;
@@ -217,11 +217,11 @@ describe(testClass, () => {
         getAll(offset?: number): Promise<Paginated<Pokemon>> {
             this._numberOfTimesGetAllIsCalled++;
             let start = offset;
-            let end = (offset || 0) + this._limit;
-            let pageResult = this._pokemon.slice(start, end);
+            let end = (offset || 0) + this.limit;
+            let pageResult = this.pokemon.slice(start, end);
             let currentOffset = offset || 0;
             let result = {
-                totalCount: this._pokemon.length,
+                totalCount: this.pokemon.length,
                 offset: currentOffset,
                 results: pageResult
             };

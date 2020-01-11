@@ -19,12 +19,13 @@ export class PokeApi implements PokemonRepository {
     private static readonly baseUrl: string = "https://pokeapi.co";
     private static readonly imageUrlBase: string =
         "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";
-    private readonly client = new restm.RestClient("", PokeApi.baseUrl);
+    private static readonly limit = 20;
 
+    private readonly client = new restm.RestClient("", PokeApi.baseUrl);
     private readonly logger = Logging.createLogger("PokeApi");
 
     getAll(offset?: number): Promise<Paginated<Pokemon>> {
-        let queryParams = `${offset ? "?offset=" + offset * 20 : ""}`;
+        let queryParams = `${(offset ? `?offset=${offset * PokeApi.limit}&limit=${PokeApi.limit}` : "")}`;
         this.logger.info(`Requesting /api/v2/pokemon${queryParams}`);
 
         return this.client.get<PokemonList>(`/api/v2/pokemon${queryParams}`).then(value => {
