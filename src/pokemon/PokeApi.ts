@@ -22,19 +22,7 @@ export class PokeApi implements PokemonRepository {
     private static readonly limit = 20;
 
     private readonly client = new restm.RestClient("", PokeApi.baseUrl);
-    private readonly logger = Logging.createLogger("PokeApi");
-
-    private static getQueryParams(params: ((string[] | (string | number | undefined)[])[])): string {
-        return params.filter(([, value]) => {
-            return value !== undefined;
-        }).map(([key, value], i) => {
-            if (i === 0) {
-                return `?${key}=${value}`;
-            } else {
-                return `&${key}=${value}`;
-            }
-        }).join("");
-    }
+    private readonly logger = Logging.createLogger(PokeApi);
 
     getAll(offset?: number): Promise<Paginated<Pokemon>> {
         let queryParams = PokeApi.getQueryParams(Array.from([
@@ -54,6 +42,18 @@ export class PokeApi implements PokemonRepository {
                 results: value.result.results.map((p) => PokeApi.toPokemon(p))
             };
         });
+    }
+
+    private static getQueryParams(params: ((string[] | (string | number | undefined)[])[])): string {
+        return params.filter(([, value]) => {
+            return value !== undefined;
+        }).map(([key, value], i) => {
+            if (i === 0) {
+                return `?${key}=${value}`;
+            } else {
+                return `&${key}=${value}`;
+            }
+        }).join("");
     }
 
     private static toPokemon(p: PokemonResult): Pokemon {

@@ -10,11 +10,11 @@ export class Logging {
         this.createLoggerFactory();
     }
 
-    public static createLogger(name: string): Logger {
+    public static createLogger(type: Function): Logger {
         if (!Logging.loggerFactory) {
             this.createLoggerFactory()
         }
-        return Logging.loggerFactory.getLogger(name);
+        return Logging.loggerFactory.getLogger(type.name);
     }
 
     private static createLoggerFactory() {
@@ -23,6 +23,6 @@ export class Logging {
 
         LFService.closeLoggers();
         this.loggerFactory = LFService.createNamedLoggerFactory("LoggerFactory", options);
-        this.createLogger("Logging").info(`Logging level set to ${Logging._logLevel}`);
+        this.createLogger(Logging).info(`Logging level set to ${Logging._logLevel}`);
     }
 }

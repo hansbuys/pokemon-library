@@ -18,7 +18,8 @@ let testClass = "Main page tests";
 
 describe(testClass, () => {
     Logging.logLevel = LogLevel.Trace;
-    let logger = Logging.createLogger(testClass);
+    const logger = Logging.createLogger(class TestApp {
+    });
 
     test('Contains a header', () => {
         const {getByText} = display();

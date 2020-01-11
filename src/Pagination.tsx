@@ -3,7 +3,7 @@ import {Paginated} from "./pokemon/PokemonRepository";
 import {Logging} from "./Logging";
 
 export function Pagination(props: { pages: Paginated<any>, onPageChange: (newPage: number) => void }) {
-    const logger = Logging.createLogger("Pagination");
+    const logger = Logging.createLogger(Pagination);
     const pageSize = props.pages.results.length;
     const numberOfPages = +props.pages.totalCount / pageSize;
 
