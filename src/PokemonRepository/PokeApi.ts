@@ -1,7 +1,6 @@
 import {Paginated, PokemonRepository} from "./PokemonRepository";
 import {Pokemon} from "./Pokemon";
-import * as restm from "typed-rest-client/RestClient";
-import {Logging} from "../Logging";
+import {HttpRepository} from "./HttpRepository";
 
 type PokemonList = {
     count: number
@@ -16,25 +15,23 @@ type PokemonResult = {
 }
 
 export class PokeApi implements PokemonRepository {
+
     private static readonly baseUrl: string = "https://pokeapi.co";
     private static readonly imageUrlBase: string =
         "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";
     private static readonly limit = 20;
 
-    private readonly client = new restm.RestClient("", PokeApi.baseUrl);
-    private readonly logger = Logging.createLogger(PokeApi);
+    private readonly httpRepo: HttpRepository = new HttpRepository(PokeApi.baseUrl);
 
     getAll(offset?: number): Promise<Paginated<Pokemon>> {
-        let queryParams = PokeApi.getQueryParams(Array.from([
+        let queryParams = Array.from([
             ["offset", offset ? offset * PokeApi.limit : undefined],
             ["limit", PokeApi.limit]
-        ]));
+        ]);
 
-        let pokemonListUrl = `/api/v2/pokemon${queryParams}`;
-        this.logger.info(`Requesting ${pokemonListUrl}`);
-        return this.client.get<PokemonList>(pokemonListUrl).then(value => {
+        return this.httpRepo.get<PokemonList>(`/api/v2/pokemon`, queryParams).then(value => {
             if (!value.result) {
-                return Promise.resolve({totalCount: 0, offset: 0, pageSize: PokeApi.limit, results: []});
+                return {totalCount: 0, offset: 0, pageSize: PokeApi.limit, results: []};
             }
             return {
                 totalCount: value.result.count,
@@ -43,18 +40,6 @@ export class PokeApi implements PokemonRepository {
                 results: value.result.results.map((p) => PokeApi.toPokemon(p))
             };
         });
-    }
-
-    private static getQueryParams(params: ((string[] | (string | number | undefined)[])[])): string {
-        return params.filter(([, value]) => {
-            return value !== undefined;
-        }).map(([key, value], i) => {
-            if (i === 0) {
-                return `?${key}=${value}`;
-            } else {
-                return `&${key}=${value}`;
-            }
-        }).join("");
     }
 
     private static toPokemon(p: PokemonResult): Pokemon {

@@ -1,12 +1,11 @@
 ul[class=pokemon] {
-    columns: 4;
+    columns: 5;
     column-width: auto;
 }
 
 ul[class=pokemon] li {
     list-style-type: none;
     text-align: center;
-    align-content: center;
     min-width: min-content;
 }
 
