@@ -6,6 +6,7 @@ import './Pagination.css';
 export function Pagination(props: { pages: Paginated<any>, onPageChange: (newPage: number) => void }) {
     const logger = Logging.createLogger(Pagination);
     const numberOfPages = Math.ceil(props.pages.totalCount / props.pages.pageSize);
+    const maxNumberOfPages = 10;
 
     function pageClick(pageNumber: number, currentPage: number) {
         if (pageNumber !== currentPage && pageNumber !== 0 && pageNumber <= numberOfPages) {
@@ -14,10 +15,15 @@ export function Pagination(props: { pages: Paginated<any>, onPageChange: (newPag
     }
 
     if (props.pages.totalCount > props.pages.pageSize) {
-        const pages = Array.from(Array(Math.min(numberOfPages, 10)).keys(), v => v + 1);
-
         const currentPage = props.pages.offset + 1;
         logger.info(`Displaying page ${currentPage}/${numberOfPages}`);
+
+        const maxOffset = Math.max(numberOfPages - maxNumberOfPages + 1, 1);
+        const naiveOffset = Math.max(currentPage - Math.ceil(maxNumberOfPages / 2) + 1, 1);
+        logger.trace(`Offsets: Naive=${naiveOffset} Max=${maxOffset}`);
+        let offset = Math.min(maxOffset, naiveOffset);
+        const pages = Array.from(Array(Math.min(numberOfPages, maxNumberOfPages)).keys(), v => v + offset);
+        logger.trace(`Pages on page: ${pages.join(", ")}`);
 
         return <div>
             <ul className="pagination">

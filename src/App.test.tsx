@@ -185,6 +185,49 @@ describe(testClass, () => {
         expect(activePage).toHaveClass("active");
     });
 
+    test("Supports more than 10 pages", async () => {
+        const multiple: Pokemon[] = generatePokemon(15);
+        const {getByText, queryByText} = display(multiple, 1);
+
+        await waitForDomChange();
+        fireEvent.click(getByText("10"));
+        await waitForDomChange();
+
+        expectNumberOfPagesWithNavigation(9, queryByText, 6);
+    });
+
+    test("Supports more than 10 pages, and does not go past the last page", async () => {
+        const multiple: Pokemon[] = generatePokemon(15);
+        const {getByText, queryByText} = display(multiple, 1);
+
+        await waitForDomChange();
+        fireEvent.click(getByText("10"));
+        await waitForDomChange();
+        fireEvent.click(getByText("15"));
+        await waitForDomChange();
+
+        expectNumberOfPagesWithNavigation(9, queryByText, 6);
+    });
+
+    test("Supports more than 10 pages, and shows integers when on even pages", async () => {
+        const multiple: Pokemon[] = generatePokemon(49);
+        const {getByText, queryByText} = display(multiple, 1);
+
+        await waitForDomChange();
+        fireEvent.click(getByText("10"));
+        await waitForDomChange();
+        fireEvent.click(getByText("15"));
+        await waitForDomChange();
+        fireEvent.click(getByText("20"));
+        await waitForDomChange();
+        fireEvent.click(getByText("25"));
+        await waitForDomChange();
+        fireEvent.click(getByText("30"));
+        await waitForDomChange();
+
+        expectNumberOfPagesWithNavigation(9, queryByText, 26);
+    });
+
     function display(pokemon?: Pokemon[], renderLimit?: number): RenderResult {
         return displayWithRepository(new TestPokemonRepository(pokemon || [], renderLimit));
     }
@@ -193,14 +236,14 @@ describe(testClass, () => {
         return render(<App getPokemon={repository}/>);
     }
 
-    function expectNumberOfPagesWithNavigation(exactNumPages: number, queryByText: (text: Matcher, options?: SelectorMatcherOptions) => (HTMLElement | null)) {
-        for (let i = 1; i <= exactNumPages; i++) {
+    function expectNumberOfPagesWithNavigation(exactNumPages: number, queryByText: (text: Matcher, options?: SelectorMatcherOptions) => (HTMLElement | null), offset?: number) {
+        for (let i = offset || 1; i <= exactNumPages + (offset || 0); i++) {
             expect(queryByText(`${i}`)).toBeInTheDocument();
         }
         expect(queryByText("<")).toBeInTheDocument();
         expect(queryByText(">")).toBeInTheDocument();
 
-        expect(queryByText(`${exactNumPages + 1}`)).not.toBeInTheDocument();
+        expect(queryByText(`${exactNumPages + 1 + (offset || 0)}`)).not.toBeInTheDocument();
     }
 
     function expectNoPagesAndNoNavigation(exactNumPages: number, queryByText: (text: Matcher, options?: SelectorMatcherOptions) => (HTMLElement | null)) {
