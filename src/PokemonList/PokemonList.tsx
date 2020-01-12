@@ -5,7 +5,10 @@ import {PokemonListHeader} from "./PokemonListHeader";
 import {Pagination} from "../Pagination/Pagination";
 import './PokemonList.css';
 
-type PokemonListProps = { pokemon: Paginated<Pokemon>, fetchPage: ((page?: number) => void) }
+type PokemonListProps = {
+    pokemon: Paginated<Pokemon>,
+    fetchPage: ((page?: number) => void)
+}
 
 export default class PokemonList extends Component<PokemonListProps> {
     render() {
@@ -14,7 +17,9 @@ export default class PokemonList extends Component<PokemonListProps> {
                 <PokemonListHeader/>
                 <ul className="pokemon">
                     {this.props.pokemon.results.map((value: Pokemon) =>
-                        <li><img alt={value.name} src={value.imageUrl}/>{value.name}</li>)}
+                        <li key={value.name}>
+                            <img alt={value.name} src={value.imageUrl}/>{value.name}
+                        </li>)}
                 </ul>
                 <Pagination
                     pages={this.props.pokemon}
