@@ -18,7 +18,8 @@ export default class PokemonList extends Component<PokemonListProps> {
                 <ul className="pokemon">
                     {this.props.pokemon.results.map((value: Pokemon) =>
                         <li key={value.name}>
-                            <img alt={value.name} src={value.imageUrl}/>{value.name}
+                            <img alt={value.name} src={value.imageUrl}/>
+                            <p>{value.name}</p>
                         </li>)}
                 </ul>
                 <Pagination

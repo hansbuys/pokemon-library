@@ -1,11 +1,15 @@
+:root {
+    --small-margin: 5px;
+}
+
 ul[class=pokemon] {
     columns: 5;
-    column-width: auto;
+    column-gap: var(--small-margin);
 }
 
 @media only screen and (min-width: 768px) and (max-width: 1024px) {
     ul[class=pokemon] {
-        columns: 3;
+        columns: 4;
     }
 }
 
@@ -23,12 +27,24 @@ ul[class=pokemon] {
 
 ul[class=pokemon] li {
     list-style-type: none;
+    break-inside: avoid;
+
     text-align: center;
-    min-width: min-content;
+    width: max-content;
+
+    margin-bottom: var(--small-margin);
+
+    border: thin black groove;
+    border-radius: 10px;
+
+    background-color: bisque;
 }
 
 ul[class=pokemon] li img {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+    border: thin black groove;
+    border-radius: 10px;
+    margin: var(--small-margin);
+
+    background-color: antiquewhite;
+
 }
