@@ -21,16 +21,16 @@ export class Pagination extends Component<PaginationProps> {
         document.onkeydown = e => {
             const currentPage = this.props.pages.offset + 1;
             switch (e.key) {
-                case "ArrowLeft": // left
+                case "ArrowLeft":
                     this.pageClick(currentPage - 1);
                     break;
 
-                case "ArrowRight": // right
+                case "ArrowRight":
                     this.pageClick(currentPage + 1);
                     break;
 
                 default:
-                    return; // exit this handler for other keys
+                    return;
             }
         };
     }
