@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-    fireEvent,
-    Matcher,
-    render,
-    RenderResult,
-    SelectorMatcherOptions,
-    waitForDomChange,
-    waitForElement
-} from '@testing-library/react';
+import {fireEvent, Matcher, render, waitForDomChange, waitForElement} from '@testing-library/react';
 import App from './App';
 import {Paginated, Repository} from "./PokemonRepository/Repository";
 import {Pokemon} from "./PokemonRepository/Pokemon";
@@ -241,15 +233,15 @@ describe("Main page tests", () => {
         expectNumberOfPagesWithNavigation(9, queryByText, 26);
     });
 
-    function display(pokemon?: Pokemon[], renderLimit?: number): RenderResult {
+    function display(pokemon?: Pokemon[], renderLimit?: number) {
         return displayWithRepository(new TestPokemonRepository(pokemon || [], renderLimit));
     }
 
-    function displayWithRepository(repository: Repository<Pokemon>): RenderResult {
+    function displayWithRepository(repository: Repository<Pokemon>) {
         return render(App.display(repository));
     }
 
-    function expectNumberOfPagesWithNavigation(exactNumPages: number, queryByText: (text: Matcher, options?: SelectorMatcherOptions) => (HTMLElement | null), offset?: number) {
+    function expectNumberOfPagesWithNavigation(exactNumPages: number, queryByText: (text: Matcher) => (HTMLElement | null), offset?: number) {
         for (let i = offset || 1; i <= exactNumPages + (offset || 0); i++) {
             expect(queryByText(`${i}`)).toBeInTheDocument();
         }
@@ -259,7 +251,7 @@ describe("Main page tests", () => {
         expect(queryByText(`${exactNumPages + 1 + (offset || 0)}`)).not.toBeInTheDocument();
     }
 
-    function expectNoPagesAndNoNavigation(exactNumPages: number, queryByText: (text: Matcher, options?: SelectorMatcherOptions) => (HTMLElement | null)) {
+    function expectNoPagesAndNoNavigation(exactNumPages: number, queryByText: (text: Matcher) => (HTMLElement | null)) {
         for (let i = 1; i <= exactNumPages; i++) {
             expect(queryByText(`${i}`)).not.toBeInTheDocument();
         }
