@@ -6,10 +6,16 @@ import {Pagination} from "../Pagination/Pagination";
 import './PokemonList.css';
 import {PokemonListItem} from "./PokemonListItem";
 import LoadingImage from "./loading.gif"
+import {Logging} from "../Logging";
+
+enum PageMode {
+    LOADING = "LOADING",
+    LOADED = "LOADED"
+}
 
 export default class PokemonList extends Component<PokemonListProps, PokemonListState> {
 
-    private readonly loadingImage = LoadingImage;
+    private readonly logger = Logging.createLogger(PokemonList);
 
     constructor(props: { getPokemon: PokemonRepository }) {
         super(props);
@@ -31,13 +37,15 @@ export default class PokemonList extends Component<PokemonListProps, PokemonList
     }
 
     private renderLoading() {
+        this.logger.trace("Loading pokemon...");
         return <div>
             <PokemonListHeader/>
-            <img alt="loading" className="loading" src={this.loadingImage}/>
+            <img alt="loading" className="loading" src={LoadingImage}/>
         </div>;
     }
 
     private renderLoaded(pokemon: Paginated<Pokemon>) {
+        this.logger.debug(`Loaded ${pokemon.results.length} pokemon...`);
         return <div>
             <PokemonListHeader/>
             <ul className="pokemon">
@@ -80,9 +88,4 @@ type PokemonListLoading = {
 type PokemonListLoaded = {
     pageMode: PageMode.LOADED
     pokemon: Paginated<Pokemon>
-}
-
-enum PageMode {
-    LOADING = "LOADING",
-    LOADED = "LOADED"
 }

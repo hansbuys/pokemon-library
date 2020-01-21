@@ -13,6 +13,7 @@ import {Paginated, PokemonRepository} from "./PokemonRepository/PokemonRepositor
 import {Pokemon} from "./PokemonRepository/Pokemon";
 import {Logging} from "./Logging";
 import {LogLevel} from "typescript-logging";
+import LoadingImage from "./PokemonList/loading.gif"
 
 let testClass = "Main page tests";
 
@@ -36,6 +37,20 @@ describe(testClass, () => {
         expect(await waitForElement(() => getByText(new RegExp(multiple[0].name)))).toBeInTheDocument();
         expect(await waitForElement(() => getByText(new RegExp(multiple[1].name)))).toBeInTheDocument();
         expect(await waitForElement(() => getByText(new RegExp(multiple[2].name)))).toBeInTheDocument();
+    });
+
+    test('Displays a loading image while waiting', async () => {
+        const multiple: Pokemon[] = generatePokemon(1);
+
+        const {getByAltText, getByText, queryByAltText} = display(multiple);
+
+        const loadingImage = getByAltText("loading");
+        expect(loadingImage).toBeInTheDocument();
+        expect(loadingImage).toHaveAttribute("src", LoadingImage);
+
+        expect(await waitForElement(() => getByText(new RegExp(multiple[0].name)))).toBeInTheDocument();
+
+        expect(queryByAltText("loading")).not.toBeInTheDocument();
     });
 
     test('Displays an image of the PokemonRepository', async () => {
