@@ -17,7 +17,7 @@ export default class PokemonList extends Component<PokemonListProps, PokemonList
 
     private readonly logger = Logging.createLogger(PokemonList);
 
-    constructor(props: { getPokemon: Repository<Pokemon> }) {
+    constructor(props: PokemonListProps) {
         super(props);
         this.state = {
             pageMode: PageMode.LOADING,
@@ -25,7 +25,7 @@ export default class PokemonList extends Component<PokemonListProps, PokemonList
     }
 
     componentDidMount(): void {
-        this.fetchPage();
+        this.fetchPage(this.props.page);
     }
 
     render() {
@@ -79,7 +79,8 @@ export default class PokemonList extends Component<PokemonListProps, PokemonList
 }
 
 type PokemonListProps = {
-    getPokemon: Repository<Pokemon>
+    getPokemon: Repository<Pokemon>,
+    page?: number
 }
 
 type PokemonListState = PokemonListLoading | PokemonListLoaded
