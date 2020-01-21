@@ -23,6 +23,7 @@ export default class PokemonList extends Component<PokemonListProps, PokemonList
             pageMode: PageMode.LOADING,
         };
     }
+
     componentDidMount(): void {
         this.fetchPage();
     }
@@ -61,9 +62,11 @@ export default class PokemonList extends Component<PokemonListProps, PokemonList
     }
 
     private fetchPage(page?: number) {
-        this.setState({
-            pageMode: PageMode.LOADING,
-        });
+        if (this.state.pageMode !== PageMode.LOADING) {
+            this.setState({
+                pageMode: PageMode.LOADING,
+            });
+        }
         this.props.getPokemon
             .getAll(page ? page - 1 : undefined)
             .then(result => {
