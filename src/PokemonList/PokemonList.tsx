@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Paginated, PokemonRepository} from "../PokemonRepository/PokemonRepository";
+import {Paginated, Repository} from "../PokemonRepository/Repository";
 import {Pokemon} from "../PokemonRepository/Pokemon";
 import {PokemonListHeader} from "./PokemonListHeader";
 import {Pagination} from "../Pagination/Pagination";
@@ -17,7 +17,7 @@ export default class PokemonList extends Component<PokemonListProps, PokemonList
 
     private readonly logger = Logging.createLogger(PokemonList);
 
-    constructor(props: { getPokemon: PokemonRepository }) {
+    constructor(props: { getPokemon: Repository<Pokemon> }) {
         super(props);
         this.state = {
             pageMode: PageMode.LOADING,
@@ -76,7 +76,7 @@ export default class PokemonList extends Component<PokemonListProps, PokemonList
 }
 
 type PokemonListProps = {
-    getPokemon: PokemonRepository
+    getPokemon: Repository<Pokemon>
 }
 
 type PokemonListState = PokemonListLoading | PokemonListLoaded

@@ -9,7 +9,7 @@ import {
     waitForElement
 } from '@testing-library/react';
 import App from './App';
-import {Paginated, PokemonRepository} from "./PokemonRepository/PokemonRepository";
+import {Paginated, Repository} from "./PokemonRepository/Repository";
 import {Pokemon} from "./PokemonRepository/Pokemon";
 import {Logging} from "./Logging";
 import {LogLevel} from "typescript-logging";
@@ -247,7 +247,7 @@ describe(testClass, () => {
         return displayWithRepository(new TestPokemonRepository(pokemon || [], renderLimit));
     }
 
-    function displayWithRepository(repository: PokemonRepository): RenderResult {
+    function displayWithRepository(repository: Repository<Pokemon>): RenderResult {
         return render(<App getPokemon={repository}/>);
     }
 
@@ -269,7 +269,7 @@ describe(testClass, () => {
         expect(queryByText(">")).not.toBeInTheDocument();
     }
 
-    class TestPokemonRepository implements PokemonRepository {
+    class TestPokemonRepository implements Repository<Pokemon> {
         private readonly pokemon: Pokemon[];
         private readonly limit: number;
 

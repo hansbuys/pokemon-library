@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Paginated} from "../PokemonRepository/PokemonRepository";
+import {Paginated} from "../PokemonRepository/Repository";
 import {Logging} from "../Logging";
 import './Pagination.css';
 

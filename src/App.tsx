@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import './App.css';
-import {PokemonRepository} from "./PokemonRepository/PokemonRepository";
+import {Repository} from "./PokemonRepository/Repository";
 import PokemonList from "./PokemonList/PokemonList";
+import {Pokemon} from "./PokemonRepository/Pokemon";
 
-export default class App extends Component<{ getPokemon: PokemonRepository }> {
+export default class App extends Component<{ getPokemon: Repository<Pokemon> }> {
 
     render() {
         return (

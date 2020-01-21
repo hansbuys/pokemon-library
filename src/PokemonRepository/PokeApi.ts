@@ -1,4 +1,4 @@
-import {Paginated, PokemonRepository} from "./PokemonRepository";
+import {Paginated, Repository} from "./Repository";
 import {Pokemon} from "./Pokemon";
 import {HttpRepository} from "./HttpRepository";
 import {Logging} from "../Logging";
@@ -15,7 +15,7 @@ type PokemonResult = {
     url: string
 }
 
-export class PokeApi implements PokemonRepository {
+export class PokeApi implements Repository<Pokemon> {
 
     private static readonly baseUrl: string = "https://pokeapi.co";
     private static readonly imageUrlBase: string =
@@ -25,7 +25,7 @@ export class PokeApi implements PokemonRepository {
     private readonly logger = Logging.createLogger(PokeApi);
     private readonly httpRepo: HttpRepository = new HttpRepository(PokeApi.baseUrl);
 
-    private emptyResult = {totalCount: 0, offset: 0, pageSize: PokeApi.limit, results: []};
+    private emptyResult: Paginated<Pokemon> = {totalCount: 0, offset: 0, pageSize: PokeApi.limit, results: []};
 
     getAll(offset?: number): Promise<Paginated<Pokemon>> {
         let queryParams = Array.from([
