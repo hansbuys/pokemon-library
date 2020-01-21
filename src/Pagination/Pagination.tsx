@@ -13,10 +13,6 @@ export class Pagination extends Component<PaginationProps> {
     private readonly logger = Logging.createLogger(Pagination);
     private readonly maxNumberOfPages: number = 10;
 
-    constructor(props: PaginationProps) {
-        super(props);
-    }
-
     componentDidMount(): void {
         document.onkeydown = e => {
             const currentPage = this.props.pages.offset + 1;
