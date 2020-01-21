@@ -15,9 +15,7 @@ import {Logging} from "./Logging";
 import {LogLevel} from "typescript-logging";
 import LoadingImage from "./PokemonList/loading.gif"
 
-let testClass = "Main page tests";
-
-describe(testClass, () => {
+describe("Main page tests", () => {
     Logging.logLevel = LogLevel.Trace;
     const logger = Logging.createLogger(class TestApp {
     });
@@ -42,13 +40,13 @@ describe(testClass, () => {
     test('Displays a loading image while waiting', async () => {
         const multiple: Pokemon[] = generatePokemon(1);
 
-        const {getByAltText, getByText, queryByAltText} = display(multiple);
+        const {getByAltText, queryByAltText} = display(multiple);
 
         const loadingImage = getByAltText("loading");
         expect(loadingImage).toBeInTheDocument();
         expect(loadingImage).toHaveAttribute("src", LoadingImage);
 
-        expect(await waitForElement(() => getByText(new RegExp(multiple[0].name)))).toBeInTheDocument();
+        await waitForDomChange();
 
         expect(queryByAltText("loading")).not.toBeInTheDocument();
     });
