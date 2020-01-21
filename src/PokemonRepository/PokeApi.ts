@@ -47,9 +47,9 @@ export class PokeApi implements PokemonRepository {
         let name = PokeApi.capitalize(p.name);
 
         return {
+            id: id,
             name: name,
             imageUrl: PokeApi.imageUrlBase + id + ".png",
-            id: id
         };
     }
 

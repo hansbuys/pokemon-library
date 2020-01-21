@@ -2,6 +2,12 @@
     --small-margin: 5px;
 }
 
+img[class=loading] {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 ul[class=pokemon] {
     columns: 5;
     column-gap: var(--small-margin);
