@@ -44,36 +44,38 @@ export class Pagination extends Component<PaginationProps> {
     }
 
     render() {
+        if (this.props.pages.totalCount <= this.props.pages.pageSize || this.props.pages.totalCount === 0) {
+            this.logger.warn("No pages to display.");
+            return <div/>;
+        }
+
         const numberOfPages = Math.ceil(this.props.pages.totalCount / this.props.pages.pageSize);
         const currentPage = this.props.pages.offset + 1;
         this.logger.info(`Displaying page ${currentPage}/${numberOfPages}`);
 
-        if (this.props.pages.totalCount > this.props.pages.pageSize) {
-            const maxOffset = Math.max(numberOfPages - this.maxNumberOfPages + 1, 1);
-            const naiveOffset = Math.max(currentPage - Math.ceil(this.maxNumberOfPages / 2) + 1, 1);
-            this.logger.trace(`Offsets: Naive=${naiveOffset} Max=${maxOffset}`);
-            let offset = Math.min(maxOffset, naiveOffset);
-            const pages = Array.from(Array(Math.min(numberOfPages, this.maxNumberOfPages)).keys(), v => v + offset);
-            this.logger.trace(`Pages on page: ${pages.join(", ")}`);
+        const maxOffset = Math.max(numberOfPages - this.maxNumberOfPages + 1, 1);
+        const naiveOffset = Math.max(currentPage - Math.ceil(this.maxNumberOfPages / 2) + 1, 1);
+        this.logger.trace(`Offsets: Naive=${naiveOffset} Max=${maxOffset}`);
 
-            return <div>
-                <ul className="pagination">
-                    <li key="previous"
-                        className={currentPage === 1 ? "disable" : ""}
-                        accessKey=""
-                        onClick={() => this.pageClick(currentPage - 1)}>&lt;</li>
-                    {pages.map((i) =>
-                        <li key={i}
-                            className={i === currentPage ? "active" : ""}
-                            onClick={() => this.pageClick(i)}>{i}</li>
-                    )}
-                    <li key="next"
-                        className={currentPage === numberOfPages ? "disable" : ""}
-                        onClick={() => this.pageClick(currentPage + 1)}>&gt;</li>
-                </ul>
-            </div>;
-        } else {
-            return <div/>;
-        }
+        let offset = Math.min(maxOffset, naiveOffset);
+        const pages = Array.from(Array(Math.min(numberOfPages, this.maxNumberOfPages)).keys(), v => v + offset);
+        this.logger.trace(`Pages on page: ${pages.join(", ")}`);
+
+        return <div>
+            <ul className="pagination">
+                <li key="previous"
+                    className={currentPage === 1 ? "disable" : ""}
+                    accessKey=""
+                    onClick={() => this.pageClick(currentPage - 1)}>&lt;</li>
+                {pages.map((i) =>
+                    <li key={i}
+                        className={i === currentPage ? "active" : ""}
+                        onClick={() => this.pageClick(i)}>{i}</li>
+                )}
+                <li key="next"
+                    className={currentPage === numberOfPages ? "disable" : ""}
+                    onClick={() => this.pageClick(currentPage + 1)}>&gt;</li>
+            </ul>
+        </div>;
     }
 }
