@@ -1,6 +1,7 @@
 import {Paginated, PokemonRepository} from "./PokemonRepository";
 import {Pokemon} from "./Pokemon";
 import {HttpRepository} from "./HttpRepository";
+import {Logging} from "../Logging";
 
 type PokemonList = {
     count: number
@@ -21,7 +22,10 @@ export class PokeApi implements PokemonRepository {
         "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";
     private static readonly limit = 20;
 
+    private readonly logger = Logging.createLogger(PokeApi);
     private readonly httpRepo: HttpRepository = new HttpRepository(PokeApi.baseUrl);
+
+    private emptyResult = {totalCount: 0, offset: 0, pageSize: PokeApi.limit, results: []};
 
     getAll(offset?: number): Promise<Paginated<Pokemon>> {
         let queryParams = Array.from([
@@ -31,7 +35,7 @@ export class PokeApi implements PokemonRepository {
 
         return this.httpRepo.get<PokemonList>(`/api/v2/pokemon`, queryParams).then(value => {
             if (!value.result) {
-                return {totalCount: 0, offset: 0, pageSize: PokeApi.limit, results: []};
+                return this.emptyResult;
             }
             return {
                 totalCount: value.result.count,
@@ -39,6 +43,9 @@ export class PokeApi implements PokemonRepository {
                 pageSize: PokeApi.limit,
                 results: value.result.results.map((p) => PokeApi.toPokemon(p))
             };
+        }).catch(() => {
+            this.logger.error("Error while fetching pokemon.");
+            return this.emptyResult;
         });
     }
 
