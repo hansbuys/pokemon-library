@@ -246,7 +246,7 @@ describe("Main page tests", () => {
     }
 
     function displayWithRepository(repository: Repository<Pokemon>): RenderResult {
-        return render(<App getPokemon={repository}/>);
+        return render(App.display(repository));
     }
 
     function expectNumberOfPagesWithNavigation(exactNumPages: number, queryByText: (text: Matcher, options?: SelectorMatcherOptions) => (HTMLElement | null), offset?: number) {
