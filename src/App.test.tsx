@@ -6,6 +6,7 @@ import {Pokemon} from "./PokemonRepository/Pokemon";
 import {Logging} from "./Logging";
 import {LogLevel} from "typescript-logging";
 import LoadingImage from "./PokemonList/loading.gif"
+import expect from "./Jest/ExpectExtensions";
 
 describe("Main page tests", () => {
     Logging.logLevel = LogLevel.Trace;
@@ -198,7 +199,7 @@ describe("Main page tests", () => {
         fireEvent.click(getByText("10"));
         await waitForDomChange();
 
-        expectNumberOfPagesWithNavigation(9, queryByText, 6);
+        expectNumberOfPagesWithNavigation(10, queryByText, 6);
     });
 
     test("Supports more than 10 pages, and does not go past the last page", async () => {
@@ -211,7 +212,7 @@ describe("Main page tests", () => {
         fireEvent.click(getByText("15"));
         await waitForDomChange();
 
-        expectNumberOfPagesWithNavigation(9, queryByText, 6);
+        expectNumberOfPagesWithNavigation(10, queryByText, 6);
     });
 
     test("Supports more than 10 pages, and shows integers when on even pages", async () => {
@@ -230,7 +231,7 @@ describe("Main page tests", () => {
         fireEvent.click(getByText("30"));
         await waitForDomChange();
 
-        expectNumberOfPagesWithNavigation(9, queryByText, 26);
+        expectNumberOfPagesWithNavigation(10, queryByText, 26);
     });
 
     function display(pokemon?: Pokemon[], renderLimit?: number) {
@@ -241,14 +242,16 @@ describe("Main page tests", () => {
         return render(App.display(repository));
     }
 
-    function expectNumberOfPagesWithNavigation(exactNumPages: number, queryByText: (text: Matcher) => (HTMLElement | null), offset?: number) {
-        for (let i = offset || 1; i <= exactNumPages + (offset || 0); i++) {
-            expect(queryByText(`${i}`)).toBeInTheDocument();
+    function expectNumberOfPagesWithNavigation(numOfPagesToDisplay: number, queryByText: (text: Matcher) => (HTMLElement | null), startingWith: number = 1) {
+        const endAt = numOfPagesToDisplay + startingWith - 1;
+
+        for (let i = startingWith; i <= endAt; i++) {
+            expect(queryByText(`${i}`), `Expected pagination to include page ${i}`).toBeInTheDocument();
         }
         expect(queryByText("<")).toBeInTheDocument();
         expect(queryByText(">")).toBeInTheDocument();
 
-        expect(queryByText(`${exactNumPages + 1 + (offset || 0)}`)).not.toBeInTheDocument();
+        expect(queryByText(`${endAt + 1}`), `Expected pagination not to include page ${endAt + 1}`).not.toBeInTheDocument();
     }
 
     function expectNoPagesAndNoNavigation(exactNumPages: number, queryByText: (text: Matcher) => (HTMLElement | null)) {
